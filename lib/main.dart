@@ -1,3 +1,6 @@
+import 'package:financia/pages/main_contentpage.dart';
+import 'package:financia/pages/main_homepage.dart';
+import 'package:financia/pages/main_userprofilepage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Financia',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -28,9 +31,9 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Home Page'),
     );
   }
 }
@@ -55,6 +58,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  int currentPageIndex = 1;
+
+  final List<Widget> pages = [
+    //const Center(child: Text('Content Page')),
+    //const Center(child: Text('Home Page')),
+    //const Center(child: Text('User Profile Page')),
+    ContentPage(),
+    HomePage(),
+    UserProfilePage(),
+  ];
 
   void _incrementCounter() {
     setState(() {
@@ -65,6 +78,12 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+
+   /* void _setCurrentNavigationpage(index) {
+      setState(() {
+        currentPageIndex = index;
+      });
+    }*/
   }
 
   @override
@@ -85,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
+      /*body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
@@ -111,6 +130,29 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ),
+      ),*/
+      body: pages[currentPageIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (value) => {
+          setState(() {
+            currentPageIndex = value;
+          })
+        },
+        currentIndex: currentPageIndex,
+        items: const [        
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu),
+            label: 'Content'
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home'
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Profile'
+          ),
+        ]
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
