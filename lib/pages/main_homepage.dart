@@ -1,12 +1,12 @@
+import 'package:financia/pages/calculators/affordability_page.dart';
+import 'package:financia/pages/calculators/mortgage_page.dart';
+import 'package:financia/pages/tools/faq_page.dart';
 import 'package:flutter/material.dart';
 import 'tools/chat_with_advisorpage.dart';
 import 'tools/visiting_bankpage.dart';
 import 'tools/word_bankpage.dart';
-import 'tools/faq_page.dart';
 import 'calculators/cash_flowpage.dart';
-import 'calculators/mortgage_page.dart';
 import 'calculators/tvm_page.dart';
-import 'calculators/affordability_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -73,12 +73,12 @@ class HomePage extends StatelessWidget {
                   'assets/images/wordBank.png',
                   const WordBankPage(),
                 ),
-                /*_buildSmallCard(
+                _buildSmallCard(
                   context,
                   'FAQ',
                   'assets/images/faq.png',
                   const FAQPage(),
-                ),*/
+                ),
               ],
             ),
           ),
@@ -106,24 +106,24 @@ class HomePage extends StatelessWidget {
                   'assets/images/cashFlowCalc.png',
                   const CashFlowPage(),
                 ),
-                /*_buildSmallCard(
+                _buildSmallCard(
                   context,
                   'Mortgage',
                   'assets/images/mortgageCalc.png',
                   const MortgagePage(),
-                ),*/
+                ),
                 _buildSmallCard(
                   context,
                   'TVM',
                   'assets/images/tvmCalc.jpg',
                   const TVMPage(),
                 ),
-                /*_buildSmallCard(
+                _buildSmallCard(
                   context,
                   'Affordability',
                   'assets/images/affordabilityCalc.png',
                   const AffordabilityPage(),
-                ),*/
+                ),
               ],
             ),
           ),
