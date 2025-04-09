@@ -9,7 +9,9 @@ import 'calculators/cash_flowpage.dart';
 import 'calculators/tvm_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final Map<String, dynamic> userProfile;
+
+  const HomePage({super.key, required this.userProfile});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,18 @@ class HomePage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Welcome Message
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'Welcome, ${userProfile['name']?.split(' ')[0] ?? 'Guest'}!',
+              style: const TextStyle(
+                fontFamily: 'Roboto',
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           // Banner Image
           SizedBox(
             height: 200,

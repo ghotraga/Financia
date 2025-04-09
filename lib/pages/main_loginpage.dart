@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:financia/main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,52 +23,48 @@ class _LoginPageState extends State<LoginPage> {
   String? _idToken;
   Map<String, dynamic>? _userProfile;
 
-Future<void> _login() async {
-  try {
-    print('Starting login...');
-    final AuthorizationTokenResponse? result =
-        await _appAuth.authorizeAndExchangeCode(
-      AuthorizationTokenRequest(
-        _auth0ClientId,
-        _auth0RedirectUri,
-        issuer: _auth0Issuer,
-        scopes: ['openid', 'profile', 'email'],
-        additionalParameters: {'prompt': 'login'}, // Force login page to show
-      ),
-    );
+  Future<void> _login() async {
+    try {
+      print('Starting login...');
+      final AuthorizationTokenResponse? result =
+          await _appAuth.authorizeAndExchangeCode(
+        AuthorizationTokenRequest(
+          _auth0ClientId,
+          _auth0RedirectUri,
+          issuer: _auth0Issuer,
+          scopes: ['openid', 'profile', 'email'],
+        ),
+      );
 
-    if (result != null) {
-      print('Login successful!');
-      print('Access Token: ${result.accessToken}');
-      print('ID Token: ${result.idToken}');
-      setState(() {
-        _accessToken = result.accessToken;
-        _idToken = result.idToken;
-      });
+      if (result != null) {
+        print('Login successful!');
+        print('Access Token: ${result.accessToken}');
+        print('ID Token: ${result.idToken}');
+        setState(() {
+          _accessToken = result.accessToken;
+          _idToken = result.idToken;
+        });
 
-      // Fetch user profile
-      await _fetchUserProfile();
+        // Fetch user profile
+        await _fetchUserProfile();
+
+        // Navigate to the main home page and pass the user profile
+        if (_userProfile != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MyHomePage(
+                title: 'Home Page',
+                userProfile: _userProfile!,
+              ),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print('Login failed: $e');
     }
-  } catch (e) {
-    print('Login failed: $e');
   }
-}
-void _logout() async {
-  final logoutUrl =
-      'https://${_auth0Domain}/v2/logout?client_id=$_auth0ClientId&returnTo=com.auth0.flutter://logout-callback';
-
-  try {
-    await http.get(Uri.parse(logoutUrl));
-    setState(() {
-      _userProfile = null;
-      _accessToken = null;
-      _idToken = null;
-    });
-    print('Logged out successfully!');
-  } catch (e) {
-    print('Logout failed: $e');
-  }
-}
 
   Future<void> _fetchUserProfile() async {
     final url = Uri.parse('https://$_auth0Domain/userinfo');

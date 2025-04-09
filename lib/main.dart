@@ -1,3 +1,4 @@
+import 'package:financia/pages/main_loginpage.dart';
 import 'package:flutter/material.dart';
 import 'package:financia/pages/main_contentpage.dart';
 import 'package:financia/pages/main_homepage.dart';
@@ -17,15 +18,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orangeAccent),
       ),
-      home: const MyHomePage(title: 'Home Page'),
+      home: const MyHomePage(title: 'Home Page', userProfile: {}),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key, required this.title, required this.userProfile});
 
   final String title;
+  final Map<String, dynamic> userProfile;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -34,21 +36,22 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int currentPageIndex = 1;
 
-  final List<Widget> pages = [
-    ContentPage(),
-    HomePage(),
-    UserProfilePage(),
-  ];
-
   @override
   void initState() {
     super.initState();
-    _showLoginPage();
+    _checkUserProfile();
+  }
+
+  void _checkUserProfile() {
+    // If the user profile is empty, show the login page
+    if (widget.userProfile.isEmpty) {
+      _showLoginPage();
+    }
   }
 
   void _showLoginPage() {
     Future.delayed(Duration.zero, () {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           fullscreenDialog: true,
@@ -60,7 +63,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> pages = [
+      ContentPage(),
+      HomePage(userProfile: {},),
+      UserProfilePage(userProfile: widget.userProfile),
+    ];
+
     return Scaffold(
+      /*appBar: AppBar(
+        title: Text('Welcome, ${widget.userProfile['name'] ?? 'Guest'}!'),
+        backgroundColor: Colors.orangeAccent,
+      ),*/
       body: pages[currentPageIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) {
@@ -83,29 +96,6 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Profile',
           ),
         ],
-      ),
-    );
-  }
-}
-
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-        backgroundColor: Colors.orangeAccent,
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Simulate login and dismiss the login page
-            Navigator.pop(context);
-          },
-          child: const Text('Login'),
-        ),
       ),
     );
   }
